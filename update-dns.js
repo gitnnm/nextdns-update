@@ -276,7 +276,7 @@ async function main() {
       results.push({ domain, status: 'updated', ip: newIp });
       
       // Небольшая пауза между доменами, чтобы не перегружать API
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
     } catch (e) {
       console.error(`  Ошибка: ${e.message}`);
