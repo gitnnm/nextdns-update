@@ -236,7 +236,8 @@ async function main() {
     }
   }
   
-  // Итоги  const updated = results.filter(r => r.status === 'updated').length;
+  // Итоги  
+  const updated = results.filter(r => r.status === 'updated').length;
   const errors = results.filter(r => r.status === 'error').length;
   
   console.log('\n=== ИТОГИ ===');
