@@ -1,0 +1,13 @@
+{
+  "name": "nextdns-updater",
+  "version": "1.0.0",
+  "description": "Автоматическое обновление IP-адресов в NextDNS через Comss DNS",
+  "main": "update-dns.js",
+  "type": "module",
+  "scripts": {
+    "start": "node update-dns.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
