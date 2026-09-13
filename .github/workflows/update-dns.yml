@@ -1,0 +1,27 @@
+name: Update NextDNS Rewrites
+
+on:
+  schedule:
+    # Каждый час (UTC)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Ручной запуск через кнопку в GitHub
+
+jobs:
+  update-dns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # Ограничение на случай зависания
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run DNS update script
+        env:
+          NEXTDNS_API_KEY: ${{ secrets.NEXTDNS_API_KEY }}
+          NEXTDNS_PROFILE_ID: ${{ secrets.NEXTDNS_PROFILE_ID }}
+        run: node update-dns.js
