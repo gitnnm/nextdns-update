@@ -100,8 +100,19 @@ const domains = [
   // Grok / xAI
   "x.ai", "grok.com", "api.x.ai", "accounts.x.ai",
   // Microsoft Copilot
-  "copilot.microsoft.com", "sydney.bing.com", "edgeservices.bing.com",
-  "login.live.com", "login.microsoftonline.com"
+    "auth.xboxlive.com",
+  "copilot.microsoft.com",
+  "designer.microsoft.com",
+  "ecs.office.com",
+  "edgeservices.bing.com",
+  "gssv-play-prod.xboxlive.com",
+  "rewards.bing.com",
+  "sydney.bing.com",
+  "titlestorage.xboxlive.com",
+  "xboxdesignlab.xbox.com",
+  "xgpuweb.gssv-play-prod.xboxlive.com",
+  "xgpuwebf2p.gssv-play-prod.xboxlive.com",
+  "xsts.auth.xboxlive.com"
 ];
 
 // === Вспомогательные функции ===
