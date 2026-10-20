@@ -13,9 +13,9 @@ if (!NEXTDNS_API_KEY || !NEXTDNS_PROFILE_ID) {
 
 // === Фиксированные IP (не запрашиваем Comss) ===
 const fixedIps = {
-  'deezer.com': '159.194.200.33',
-  'www.deezer.com': '159.194.200.33',
-  'payment.deezer.com': '159.194.200.33',
+  'deezer.com': '193.233.112.68',
+  'www.deezer.com': '193.233.112.68',
+  'payment.deezer.com': '193.233.112.68',
 };
 
 // === Домены, для которых IP берём у Comss ===
