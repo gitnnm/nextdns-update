@@ -1,6 +1,6 @@
 // update-dns.js
 // Скрипт для обновления IP-адресов в NextDNS через Comss DNS
-// + фиксированные IP для Deezer (без запроса к Comss)
+// + фиксированные IP для Deezer и Google AI (без запроса к Comss)
 // ИСПРАВЛЕНО: NextDNS Rewrites не поддерживает PATCH, используется DELETE + POST
 
 const NEXTDNS_API_KEY = process.env.NEXTDNS_API_KEY;
@@ -12,10 +12,66 @@ if (!NEXTDNS_API_KEY || !NEXTDNS_PROFILE_ID) {
 }
 
 // === Фиксированные IP (не запрашиваем Comss) ===
+const FIXED_IP = '193.233.112.68';
+
 const fixedIps = {
-  'deezer.com': '193.233.112.68',
-  'www.deezer.com': '193.233.112.68',
-  'payment.deezer.com': '193.233.112.68',
+  // Deezer
+  'deezer.com': FIXED_IP,
+  'www.deezer.com': FIXED_IP,
+  'payment.deezer.com': FIXED_IP,
+
+  // Google AI (все домены из блока "Google AI")
+  'gemini.google.com': FIXED_IP,
+  'gemini.google': FIXED_IP,
+  'aistudio.google.com': FIXED_IP,
+  'generativelanguage.googleapis.com': FIXED_IP,
+  'generativeai.google': FIXED_IP,
+  'ai.google.dev': FIXED_IP,
+  'alkalicore-pa.clients6.google.com': FIXED_IP,
+  'alkalimakersuite-pa.clients6.google.com': FIXED_IP,
+  'alkalimining-pa.googleapis.com': FIXED_IP,
+  'aisandbox-pa.googleapis.com': FIXED_IP,
+  'aitestkitchen.withgoogle.com': FIXED_IP,
+  'apis.google.com': FIXED_IP,
+  'appcatalyst.pa.googleapis.com': FIXED_IP,
+  'assistant-s3-pa.googleapis.com': FIXED_IP,
+  'bard.google.com': FIXED_IP,
+  'daily-cloudcode-pa.googleapis.com': FIXED_IP,
+  'datastudio.google.com': FIXED_IP,
+  'deepmind.com': FIXED_IP,
+  'deepmind.google': FIXED_IP,
+  'developerprofiles-pa.googleapis.com': FIXED_IP,
+  'geller-pa.googleapis.com': FIXED_IP,
+  'jules.google': FIXED_IP,
+  'jules.google.com': FIXED_IP,
+  'labs.google': FIXED_IP,
+  'labs.google.com': FIXED_IP,
+  'lookerstudio.google.com': FIXED_IP,
+  'makersuite.google.com': FIXED_IP,
+  'notebook.google': FIXED_IP,
+  'notebook.google.com': FIXED_IP,
+  'notebook-pa.googleapis.com': FIXED_IP,
+  'notebooklm.google': FIXED_IP,
+  'notebooklm.google.com': FIXED_IP,
+  'notebooklm-pa.googleapis.com': FIXED_IP,
+  'o.pki.goog': FIXED_IP,
+  'opal.google': FIXED_IP,
+  'opal.google.com': FIXED_IP,
+  'opal.withgoogle.com': FIXED_IP,
+  'people-pa.clients6.google.com': FIXED_IP,
+  'proactivebackend-pa.googleapis.com': FIXED_IP,
+  'robinfrontend-pa.googleapis.com': FIXED_IP,
+  'signaler-pa.clients6.google.com': FIXED_IP,
+  'stitch.withgoogle.com': FIXED_IP,
+  'suggestqueries.google.com': FIXED_IP,
+  'waa-pa.clients6.google.com': FIXED_IP,
+  'webchannel-alkalimakersuite-pa.clients6.google.com': FIXED_IP,
+  'antigravity.google': FIXED_IP,
+  'www.antigravity.google': FIXED_IP,
+  'flow.google': FIXED_IP,
+  'www.flow.google': FIXED_IP,
+  'flowmusic.app': FIXED_IP,
+  'www.flowmusic.app': FIXED_IP,
 };
 
 // === Домены, для которых IP берём у Comss ===
@@ -33,26 +89,6 @@ const comssDomains = [
   "sdmntprpolandcentral.oaiusercontent.com", "sdmntprnortheu.oaiusercontent.com",
   // Claude / Anthropic
   "anthropic.com", "api.anthropic.com", "claude.ai", "claude.com", "claudeusercontent.com",
-  // Google AI
-  "gemini.google.com", "gemini.google", "aistudio.google.com",
-  "generativelanguage.googleapis.com", "generativeai.google", "ai.google.dev",
-  "alkalicore-pa.clients6.google.com", "alkalimakersuite-pa.clients6.google.com",
-  "alkalimining-pa.googleapis.com", "aisandbox-pa.googleapis.com",
-  "aitestkitchen.withgoogle.com", "apis.google.com", "appcatalyst.pa.googleapis.com",
-  "assistant-s3-pa.googleapis.com", "bard.google.com", "daily-cloudcode-pa.googleapis.com",
-  "datastudio.google.com", "deepmind.com", "deepmind.google",
-  "developerprofiles-pa.googleapis.com", "geller-pa.googleapis.com",
-  "jules.google", "jules.google.com", "labs.google", "labs.google.com",
-  "lookerstudio.google.com", "makersuite.google.com", "notebook.google",
-  "notebook.google.com", "notebook-pa.googleapis.com", "notebooklm.google",
-  "notebooklm.google.com", "notebooklm-pa.googleapis.com", "o.pki.goog",
-  "opal.google", "opal.google.com", "opal.withgoogle.com",
-  "people-pa.clients6.google.com", "proactivebackend-pa.googleapis.com",
-  "robinfrontend-pa.googleapis.com", "signaler-pa.clients6.google.com",
-  "stitch.withgoogle.com", "suggestqueries.google.com", "waa-pa.clients6.google.com",
-  "webchannel-alkalimakersuite-pa.clients6.google.com", "antigravity.google",
-  "www.antigravity.google", "flow.google", "www.flow.google",
-  "flowmusic.app", "www.flowmusic.app",
   // Grok / xAI
   "x.ai", "grok.com", "api.x.ai", "accounts.x.ai",
   // Microsoft Copilot
